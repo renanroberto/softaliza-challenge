@@ -19,10 +19,11 @@ defmodule SoftalizaWeb.Router do
     get "/", PageController, :index
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", SoftalizaWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", SoftalizaWeb do
+    pipe_through :api
+
+    resources "/events", EventController, only: [:index, :show, :create]
+  end
 
   # Enables LiveDashboard only for development
   #
