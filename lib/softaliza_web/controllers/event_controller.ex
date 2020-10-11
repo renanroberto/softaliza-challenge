@@ -4,11 +4,7 @@ defmodule SoftalizaWeb.EventController do
   alias Softaliza.Events
 
   def index(conn, _params) do
-    events = [
-      %{id: 1, title: "microbiologia", active: true},
-      %{id: 2, title: "sistemas dinâmicos", active: true},
-      %{id: 3, title: "equações diferenciais", active: false}
-    ]
+    events = Events.list_events()
 
     render(conn, "events.json", data: events)
   end
