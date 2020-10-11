@@ -3,7 +3,7 @@ defmodule Softaliza.Events.Event do
   import Ecto.Changeset
 
   schema "events" do
-    field :active, :boolean, default: false
+    field :active, :boolean, default: true
     field :description, :string
     field :end_date, :date
     field :end_hour, :time
@@ -20,7 +20,23 @@ defmodule Softaliza.Events.Event do
   @doc false
   def changeset(event, attrs) do
     event
-    |> cast(attrs, [:title, :description, :start_hour, :end_hour, :start_date, :end_date, :online, :hosted_by, :link, :active])
-    |> validate_required([:title, :description, :start_hour, :end_hour, :start_date, :end_date, :online, :hosted_by, :link, :active])
+    |> cast(attrs, [
+      :title,
+      :description,
+      :start_hour,
+      :end_hour,
+      :start_date,
+      :end_date,
+      :online,
+      :hosted_by,
+      :link
+    ])
+    |> validate_required([
+      :title,
+      :start_hour,
+      :end_hour,
+      :start_date,
+      :end_date
+    ])
   end
 end
