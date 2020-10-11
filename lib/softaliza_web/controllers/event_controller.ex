@@ -10,7 +10,7 @@ defmodule SoftalizaWeb.EventController do
   end
 
   def show(conn, %{"id" => id}) do
-    event = %{id: String.to_integer(id), name: "renan", age: 22}
+    event = Events.get_event!(id)
 
     render(conn, "event.json", data: event)
   end
