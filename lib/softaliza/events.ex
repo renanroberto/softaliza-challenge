@@ -37,7 +37,13 @@ defmodule Softaliza.Events do
   """
   def get_event!(id), do: Repo.get!(Event, id)
 
-  def get_event(id), do: Repo.get(Event, id)
+  def get_event(id) do
+    if event = Repo.get(Event, id) do
+      {:ok, event}
+    else
+      {:error, :not_found}
+    end
+  end
 
   @doc """
   Creates a event.
