@@ -126,7 +126,6 @@ defmodule Softaliza.Events do
   def list_articles do
     Article
     |> Repo.all()
-    |> Repo.preload(:event)
   end
 
   @doc """
@@ -146,8 +145,8 @@ defmodule Softaliza.Events do
   def get_article!(id), do: Repo.get!(Article, id)
 
   def get_article(id) do
-    if article = Repo.get(id) do
-      {:ok, Repo.preload(article, :event)}
+    if article = Repo.get(Article, id) do
+      {:ok, article}
     else
       {:error, :not_found}
     end

@@ -23,13 +23,15 @@ defmodule Softaliza.Events.Article do
       :title,
       :authors,
       :doi,
+      :event_id,
       :publication_date,
       :published_by,
       :active
     ])
     |> validate_required([
       :title,
-      :doi
+      :doi,
+      :event_id
     ])
     |> unique_constraint(:doi)
   end

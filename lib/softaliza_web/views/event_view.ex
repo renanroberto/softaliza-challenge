@@ -2,6 +2,14 @@ defmodule SoftalizaWeb.EventView do
   use SoftalizaWeb, :view
 
   def render("event.json", %{data: event}) do
+    articles =
+      render_many(
+        event.articles,
+        SoftalizaWeb.ArticleView,
+        "article.json",
+        as: :data
+      )
+
     %{
       id: event.id,
       title: event.title,
@@ -10,7 +18,7 @@ defmodule SoftalizaWeb.EventView do
       end_hour: event.end_hour,
       start_date: event.start_date,
       end_date: event.end_date,
-      articles: event.articles,
+      articles: articles,
       online: event.online,
       hosted_by: event.hosted_by,
       link: event.link
