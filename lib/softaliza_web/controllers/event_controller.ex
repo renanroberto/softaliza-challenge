@@ -13,7 +13,7 @@ defmodule SoftalizaWeb.EventController do
     if event = Events.get_event(id) do
       render(conn, "event.json", data: event)
     else
-      json(conn, %{status: "error", error: "user not found"})
+      json(conn, %{status: "error", error: "event not found"})
     end
   end
 
@@ -28,12 +28,12 @@ defmodule SoftalizaWeb.EventController do
             conn,
             %{
               status: "error",
-              error: "Something went wrong. Can't update user"
+              error: "something went wrong: can't update event"
             }
           )
       end
     else
-      json(conn, %{status: "error", error: "User not found"})
+      json(conn, %{status: "error", error: "event not found"})
     end
   end
 
