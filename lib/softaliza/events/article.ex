@@ -3,7 +3,7 @@ defmodule Softaliza.Events.Article do
   import Ecto.Changeset
 
   schema "articles" do
-    field :active, :boolean, default: false
+    field :active, :boolean, default: true
     field :authors, :string
     field :doi, :string
     field :publication_date, :date
@@ -17,8 +17,18 @@ defmodule Softaliza.Events.Article do
   @doc false
   def changeset(article, attrs) do
     article
-    |> cast(attrs, [:title, :authors, :doi, :publication_date, :published_by, :active])
-    |> validate_required([:title, :authors, :doi, :publication_date, :published_by, :active])
+    |> cast(attrs, [
+      :title,
+      :authors,
+      :doi,
+      :publication_date,
+      :published_by,
+      :active
+    ])
+    |> validate_required([
+      :title,
+      :doi
+    ])
     |> unique_constraint(:doi)
   end
 end
