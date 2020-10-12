@@ -37,6 +37,16 @@ defmodule SoftalizaWeb.EventController do
     end
   end
 
+  def delete(conn, %{"id" => id}) do
+    if event = Events.get_event(id) do
+      Events.delete_event(event)
+
+      json(conn, %{status: "ok", message: "event #{id} deleted"})
+    else
+      json(conn, %{status: "error", error: "event not found"})
+    end
+  end
+
   def create(conn, params) do
     start_date = parse_date(params["start_date"])
     end_date = parse_date(params["end_date"])
