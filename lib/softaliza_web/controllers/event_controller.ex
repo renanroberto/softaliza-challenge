@@ -10,9 +10,11 @@ defmodule SoftalizaWeb.EventController do
   end
 
   def show(conn, %{"id" => id}) do
-    event = Events.get_event!(id)
-
-    render(conn, "event.json", data: event)
+    if event = Events.get_event(id) do
+      render(conn, "event.json", data: event)
+    else
+      json(conn, %{status: "error", error: "user not found"})
+    end
   end
 
   def create(conn, params) do

@@ -22,7 +22,7 @@ defmodule SoftalizaWeb.Router do
   scope "/api", SoftalizaWeb do
     pipe_through :api
 
-    resources "/events", EventController, only: [:index, :show, :create]
+    resources "/events", EventController, only: [:index, :show, :create, :update, :delete]
   end
 
   # Enables LiveDashboard only for development
