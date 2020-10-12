@@ -19,19 +19,9 @@ defmodule SoftalizaWeb.EventController do
 
   def update(conn, %{"id" => id} = params) do
     if event = Events.get_event(id) do
-      case Events.update_event(event, params) do
-        {:ok, new_event} ->
-          render(conn, "event.json", data: new_event)
+      {:ok, new_event} = Events.update_event(event, params)
 
-        _ ->
-          json(
-            conn,
-            %{
-              status: "error",
-              error: "something went wrong: can't update event"
-            }
-          )
-      end
+      render(conn, "event.json", data: new_event)
     else
       json(conn, %{status: "error", error: "event not found"})
     end
