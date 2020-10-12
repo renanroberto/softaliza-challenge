@@ -2,6 +2,7 @@ defmodule SoftalizaWeb.EventController do
   use SoftalizaWeb, :controller
 
   alias Softaliza.Events
+  alias SoftalizaWeb.ErrorResponse
 
   def index(conn, _params) do
     events = Events.list_events()
@@ -13,7 +14,7 @@ defmodule SoftalizaWeb.EventController do
     if event = Events.get_event(id) do
       render(conn, "event.json", data: event)
     else
-      json(conn, %{status: "error", error: "event not found"})
+      ErrorResponse.bad_request(conn, "event not found")
     end
   end
 
@@ -23,7 +24,7 @@ defmodule SoftalizaWeb.EventController do
 
       render(conn, "event.json", data: new_event)
     else
-      json(conn, %{status: "error", error: "event not found"})
+      ErrorResponse.bad_request(conn, "event not found")
     end
   end
 
@@ -33,16 +34,16 @@ defmodule SoftalizaWeb.EventController do
 
       json(conn, %{status: "ok", message: "event #{id} deleted"})
     else
-      json(conn, %{status: "error", error: "event not found"})
+      ErrorResponse.bad_request(conn, "event not found")
     end
   end
 
   def create(conn, params) do
     case Events.create_event(params) do
-      {:ok, user} ->
+      {:ok, event} ->
         conn
         |> put_status(201)
-        |> json(%{status: "ok", user: user.id})
+        |> render("event.json", data: event)
 
       {:error, changeset} ->
         errors =
@@ -51,9 +52,7 @@ defmodule SoftalizaWeb.EventController do
             &SoftalizaWeb.ErrorHelpers.translate_error/1
           )
 
-        conn
-        |> put_status(400)
-        |> json(%{status: "error", errors: errors})
+        ErrorResponse.bad_request(conn, errors)
     end
   end
 end

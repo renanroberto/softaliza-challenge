@@ -7,6 +7,13 @@ defmodule SoftalizaWeb.ErrorView do
   #   "Internal Server Error"
   # end
 
+  def render("error.json", %{data: msg}) do
+    %{
+      status: "error",
+      error: msg
+    }
+  end
+
   # By default, Phoenix returns the status message from
   # the template name. For example, "404.html" becomes
   # "Not Found".
