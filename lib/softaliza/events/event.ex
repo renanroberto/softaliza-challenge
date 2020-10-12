@@ -2,6 +2,8 @@ defmodule Softaliza.Events.Event do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Softaliza.Events.Article
+
   schema "events" do
     field :active, :boolean, default: true
     field :description, :string
@@ -13,6 +15,7 @@ defmodule Softaliza.Events.Event do
     field :start_date, :date
     field :start_hour, :time
     field :title, :string
+    has_many :articles, Article
 
     timestamps()
   end
@@ -29,7 +32,8 @@ defmodule Softaliza.Events.Event do
       :end_date,
       :online,
       :hosted_by,
-      :link
+      :link,
+      :active
     ])
     |> validate_required([
       :title,

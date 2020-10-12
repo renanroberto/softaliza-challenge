@@ -2,6 +2,8 @@ defmodule Softaliza.Events.Article do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Softaliza.Events.Event
+
   schema "articles" do
     field :active, :boolean, default: true
     field :authors, :string
@@ -9,7 +11,7 @@ defmodule Softaliza.Events.Article do
     field :publication_date, :date
     field :published_by, :string
     field :title, :string
-    field :event_id, :id
+    belongs_to :event, Event
 
     timestamps()
   end

@@ -10,6 +10,7 @@ defmodule SoftalizaWeb.EventView do
       end_hour: event.end_hour,
       start_date: event.start_date,
       end_date: event.end_date,
+      articles: event.articles,
       online: event.online,
       hosted_by: event.hosted_by,
       link: event.link
