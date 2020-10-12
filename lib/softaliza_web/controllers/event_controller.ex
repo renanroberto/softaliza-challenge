@@ -17,6 +17,26 @@ defmodule SoftalizaWeb.EventController do
     end
   end
 
+  def update(conn, %{"id" => id} = params) do
+    if event = Events.get_event(id) do
+      case Events.update_event(event, params) do
+        {:ok, new_event} ->
+          render(conn, "event.json", data: new_event)
+
+        _ ->
+          json(
+            conn,
+            %{
+              status: "error",
+              error: "Something went wrong. Can't update user"
+            }
+          )
+      end
+    else
+      json(conn, %{status: "error", error: "User not found"})
+    end
+  end
+
   def create(conn, params) do
     start_date = parse_date(params["start_date"])
     end_date = parse_date(params["end_date"])
