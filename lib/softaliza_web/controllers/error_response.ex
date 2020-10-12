@@ -1,6 +1,16 @@
 defmodule SoftalizaWeb.ErrorResponse do
   use SoftalizaWeb, :controller
 
+  def bad_request(conn, %Ecto.Changeset{} = changeset) do
+    errors =
+      Ecto.Changeset.traverse_errors(
+        changeset,
+        &SoftalizaWeb.ErrorHelpers.translate_error/1
+      )
+
+    bad_request(conn, errors)
+  end
+
   def bad_request(conn, msg) do
     conn
     |> put_status(400)

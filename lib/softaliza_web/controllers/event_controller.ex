@@ -28,13 +28,7 @@ defmodule SoftalizaWeb.EventController do
         |> render("event.json", data: event)
 
       {:error, changeset} ->
-        errors =
-          Ecto.Changeset.traverse_errors(
-            changeset,
-            &SoftalizaWeb.ErrorHelpers.translate_error/1
-          )
-
-        ErrorResponse.bad_request(conn, errors)
+        ErrorResponse.bad_request(conn, changeset)
     end
   end
 
@@ -47,13 +41,7 @@ defmodule SoftalizaWeb.EventController do
         ErrorResponse.bad_request(conn, "event not found")
 
       {:error, changeset} ->
-        errors =
-          Ecto.Changeset.traverse_errors(
-            changeset,
-            &SoftalizaWeb.ErrorHelpers.translate_error/1
-          )
-
-        ErrorResponse.bad_request(conn, errors)
+        ErrorResponse.bad_request(conn, changeset)
     end
   end
 
@@ -66,13 +54,7 @@ defmodule SoftalizaWeb.EventController do
         ErrorResponse.bad_request(conn, "event not found")
 
       {:error, changeset} ->
-        errors =
-          Ecto.Changeset.traverse_errors(
-            changeset,
-            &SoftalizaWeb.ErrorHelpers.translate_error/1
-          )
-
-        ErrorResponse.bad_request(conn, errors)
+        ErrorResponse.bad_request(conn, changeset)
     end
   end
 end
