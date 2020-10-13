@@ -22,8 +22,44 @@ defmodule SoftalizaWeb.Router do
   scope "/api", SoftalizaWeb do
     pipe_through :api
 
-    resources "/events", EventController, only: [:index, :show, :create, :update, :delete]
-    resources "/articles", ArticleController, only: [:index, :show, :create, :update, :delete]
+    get "/events", EventController, :index
+    get "/events/:id", EventController, :show
+
+    get "/articles", ArticleController, :index
+    get "/articles/:id", ArticleController, :show
+  end
+
+  scope "/api", SoftalizaWeb do
+    pipe_through [:api, :authorize]
+
+    post "/events", EventController, :create
+    put "/events/:id", EventController, :update
+    patch "/events/:id", EventController, :update
+    delete "/events/:id", EventController, :delete
+
+    post "/articles", ArticleController, :create
+    put "/articles/:id", ArticleController, :update
+    patch "/articles/:id", ArticleController, :update
+    delete "/articles/:id", ArticleController, :delete
+  end
+
+  defp authorize(conn, _params) do
+    token =
+      conn
+      |> get_req_header("authorization")
+      |> List.last()
+
+    secret = System.get_env("ADMIN_TOKEN") || "admin_secret"
+
+    with "Token " <> token <- token,
+         ^secret <- token do
+      conn
+    else
+      _ ->
+        conn
+        |> SoftalizaWeb.ErrorResponse.unauthorized()
+        |> halt()
+    end
   end
 
   # Enables LiveDashboard only for development

@@ -17,4 +17,11 @@ defmodule SoftalizaWeb.ErrorResponse do
     |> put_view(SoftalizaWeb.ErrorView)
     |> render("error.json", data: msg)
   end
+
+  def unauthorized(conn) do
+    conn
+    |> put_status(401)
+    |> put_view(SoftalizaWeb.ErrorView)
+    |> render("error.json", data: "unauthorized")
+  end
 end
