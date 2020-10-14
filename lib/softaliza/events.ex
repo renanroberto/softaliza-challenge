@@ -60,9 +60,11 @@ defmodule Softaliza.Events do
 
   """
   def create_event(attrs \\ %{}) do
-    %Event{}
-    |> Event.changeset(attrs)
-    |> Repo.insert()
+    with {:ok, event} <-
+           %Event{}
+           |> Event.changeset(attrs)
+           |> Repo.insert(),
+         do: {:ok, Repo.preload(event, :articles)}
   end
 
   @doc """
@@ -78,9 +80,11 @@ defmodule Softaliza.Events do
 
   """
   def update_event(%Event{} = event, attrs) do
-    event
-    |> Event.changeset(attrs)
-    |> Repo.update()
+    with {:ok, new_event} <-
+           event
+           |> Event.changeset(attrs)
+           |> Repo.update(),
+         do: {:ok, Repo.preload(new_event, :articles)}
   end
 
   @doc """
