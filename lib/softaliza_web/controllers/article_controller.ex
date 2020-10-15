@@ -16,7 +16,7 @@ defmodule SoftalizaWeb.ArticleController do
         render(conn, "article.json", data: article)
 
       {:error, :not_found} ->
-        ErrorResponse.bad_request(conn, "article not found")
+        ErrorResponse.not_found(conn, "article")
     end
   end
 
@@ -51,7 +51,7 @@ defmodule SoftalizaWeb.ArticleController do
       render(conn, "article.json", data: deleted_article)
     else
       {:error, :not_found} ->
-        ErrorResponse.bad_request(conn, "article not found")
+        ErrorResponse.not_found(conn, "article")
 
       {:error, changeset} ->
         ErrorResponse.bad_request(conn, changeset)
