@@ -38,7 +38,7 @@ defmodule SoftalizaWeb.ArticleController do
       render(conn, "article.json", data: new_article)
     else
       {:error, :not_found} ->
-        ErrorResponse.bad_request(conn, "article not found")
+        ErrorResponse.not_found(conn, "article")
 
       {:error, changeset} ->
         ErrorResponse.bad_request(conn, changeset)

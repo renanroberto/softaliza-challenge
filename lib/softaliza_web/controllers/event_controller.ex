@@ -38,7 +38,7 @@ defmodule SoftalizaWeb.EventController do
       render(conn, "event.json", data: new_event)
     else
       {:error, :not_found} ->
-        ErrorResponse.bad_request(conn, "event not found")
+        ErrorResponse.not_found(conn, "event")
 
       {:error, changeset} ->
         ErrorResponse.bad_request(conn, changeset)
