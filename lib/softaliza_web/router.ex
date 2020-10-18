@@ -36,6 +36,8 @@ defmodule SoftalizaWeb.Router do
     put "/events/:id", EventController, :update
     patch "/events/:id", EventController, :update
     delete "/events/:id", EventController, :delete
+    post "/events/:id/certificate", EventController, :certificate
+    get "/events/certificate/:key", EventController, :get_certificate
 
     post "/articles", ArticleController, :create
     put "/articles/:id", ArticleController, :update

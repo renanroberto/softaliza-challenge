@@ -9,6 +9,8 @@ defmodule Softaliza.Application do
     children = [
       # Start the Ecto repository
       Softaliza.Repo,
+      # Start GenServer
+      {Softaliza.PdfJobs, []},
       # Start the Telemetry supervisor
       SoftalizaWeb.Telemetry,
       # Start the PubSub system
