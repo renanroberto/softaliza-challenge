@@ -24,6 +24,7 @@ defmodule SoftalizaWeb.Router do
 
     get "/events", EventController, :index
     get "/events/:id", EventController, :show
+    get "/events/certificate/:key", EventController, :get_certificate
 
     get "/articles", ArticleController, :index
     get "/articles/:id", ArticleController, :show
@@ -37,7 +38,6 @@ defmodule SoftalizaWeb.Router do
     patch "/events/:id", EventController, :update
     delete "/events/:id", EventController, :delete
     post "/events/:id/certificate", EventController, :certificate
-    get "/events/certificate/:key", EventController, :get_certificate
 
     post "/articles", ArticleController, :create
     put "/articles/:id", ArticleController, :update
