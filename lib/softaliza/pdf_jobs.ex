@@ -8,9 +8,7 @@ defmodule Softaliza.PdfJobs do
   end
 
   def lookup(key) do
-    state = GenServer.call(PdfJobs, :lookup)
-
-    with {:ok, value} <- Map.fetch(state, key) do
+    with {:ok, value} <- GenServer.call(PdfJobs, {:lookup, key}) do
       if value == :processing do
         {:error, :processing}
       else
@@ -62,8 +60,8 @@ defmodule Softaliza.PdfJobs do
   end
 
   @impl true
-  def handle_call(:lookup, _from, state) do
-    {:reply, state, state}
+  def handle_call({:lookup, key}, _from, state) do
+    {:reply, Map.fetch(state, key), state}
   end
 
   @impl true
