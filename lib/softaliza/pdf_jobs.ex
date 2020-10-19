@@ -47,7 +47,7 @@ defmodule Softaliza.PdfJobs do
     """
 
     {:ok, pdf} = PdfGenerator.generate_binary(html)
-    :timer.sleep(10000)
+
     GenServer.cast(PdfJobs, {:insert, key, pdf})
   end
 
