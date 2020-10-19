@@ -29,12 +29,26 @@ defmodule Softaliza.PdfJobs do
 
   # tasks
 
-  def gen_pdf(key, value) do
+  def gen_pdf(key, cert) do
     GenServer.cast(PdfJobs, {:insert, key, :processing})
 
-    :timer.sleep(10000)
+    html = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset="UTF-8">
+    </head>
+    <body>
+    <center><h1>Certification</h1></center>
+    <p><b>Event:</b> #{cert.event}</p>
+    <p><b>Name:</b> #{cert.name}</p>
+    </body>
+    </html>
+    """
 
-    GenServer.cast(PdfJobs, {:insert, key, value})
+    {:ok, pdf} = PdfGenerator.generate_binary(html)
+
+    GenServer.cast(PdfJobs, {:insert, key, pdf})
   end
 
   # server

@@ -86,7 +86,12 @@ defmodule SoftalizaWeb.EventController do
 
   def get_certificate(conn, %{"key" => key}) do
     with {:ok, pdf} <- PdfJobs.lookup(key) do
-      json(conn, pdf)
+      send_download(
+        conn,
+        {:binary, pdf},
+        filename: "certification.pdf",
+        charset: "utf-8"
+      )
     else
       {:error, :not_found} ->
         ErrorResponse.not_found(conn, "certificate")
