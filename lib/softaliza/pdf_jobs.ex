@@ -23,9 +23,12 @@ defmodule Softaliza.PdfJobs do
     end
   end
 
-  def insert(key, value) do
-    Task.async(fn -> gen_pdf(key, value) end)
+  def insert(key, cert = %{event: _event, name: _name}) do
+    Task.async(fn -> gen_pdf(key, cert) end)
+    :ok
   end
+
+  def insert(_key, _cert), do: :error
 
   # tasks
 
