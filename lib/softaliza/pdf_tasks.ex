@@ -14,8 +14,12 @@ defmodule Softaliza.PdfJobs do
       if value == :processing do
         {:error, :processing}
       else
+        GenServer.cast(PdfJobs, {:delete, key})
+
         {:ok, value}
       end
+    else
+      :error -> {:error, :not_found}
     end
   end
 
@@ -62,5 +66,10 @@ defmodule Softaliza.PdfJobs do
   @impl true
   def handle_cast({:insert, key, value}, state) do
     {:noreply, Map.put(state, key, value)}
+  end
+
+  @impl true
+  def handle_cast({:delete, key}, state) do
+    {:noreply, Map.delete(state, key)}
   end
 end
