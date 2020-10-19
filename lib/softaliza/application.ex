@@ -10,7 +10,7 @@ defmodule Softaliza.Application do
       # Start the Ecto repository
       Softaliza.Repo,
       # Start GenServer
-      {Softaliza.PdfJobs, []},
+      {Softaliza.PdfJobs, %{}},
       # Start the Telemetry supervisor
       SoftalizaWeb.Telemetry,
       # Start the PubSub system

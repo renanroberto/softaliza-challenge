@@ -10,16 +10,12 @@ defmodule Softaliza.PdfJobs do
   def lookup(key) do
     state = GenServer.call(PdfJobs, :lookup)
 
-    with {^key, value} <- List.keyfind(state, key, 0) do
-      case value do
-        :processing ->
-          {:error, :processing}
-
-        _ ->
-          {:ok, value}
+    with {:ok, value} <- Map.fetch(state, key) do
+      if value == :processing do
+        {:error, :processing}
+      else
+        {:ok, value}
       end
-    else
-      _ -> {:error, :not_found}
     end
   end
 
@@ -47,7 +43,7 @@ defmodule Softaliza.PdfJobs do
     """
 
     {:ok, pdf} = PdfGenerator.generate_binary(html)
-
+    :timer.sleep(10000)
     GenServer.cast(PdfJobs, {:insert, key, pdf})
   end
 
@@ -65,6 +61,6 @@ defmodule Softaliza.PdfJobs do
 
   @impl true
   def handle_cast({:insert, key, value}, state) do
-    {:noreply, [{key, value} | state]}
+    {:noreply, Map.put(state, key, value)}
   end
 end
