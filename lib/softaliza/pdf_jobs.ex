@@ -22,6 +22,7 @@ defmodule Softaliza.PdfJobs do
   end
 
   def insert(key, cert = %{event: _event, name: _name}) do
+    # TODO The server that should start the task
     Task.async(fn -> gen_pdf(key, cert) end)
     :ok
   end
@@ -33,6 +34,7 @@ defmodule Softaliza.PdfJobs do
   def gen_pdf(key, cert) do
     GenServer.cast(PdfJobs, {:insert, key, :processing})
 
+    # TODO move it to a .html.eex
     html = """
     <!DOCTYPE html>
     <html>
