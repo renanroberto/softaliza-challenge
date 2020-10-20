@@ -1,6 +1,9 @@
 defmodule Softaliza.PdfJobs do
   use GenServer
 
+  # TODO as PDF generation takes less then 1 second, then
+  # we can simply generate de PDf on the request process
+
   # client
 
   def start_link(opts) do
@@ -12,6 +15,7 @@ defmodule Softaliza.PdfJobs do
       if value == :processing do
         {:error, :processing}
       else
+        # TODO if user never ask for PDF, then PDF is never deleted
         GenServer.cast(PdfJobs, {:delete, key})
 
         {:ok, value}
@@ -34,7 +38,8 @@ defmodule Softaliza.PdfJobs do
   def gen_pdf(key, cert) do
     GenServer.cast(PdfJobs, {:insert, key, :processing})
 
-    # TODO move it to a .html.eex
+    # TODO move it to a .html.eex and render with
+    # Phoenix.View.render_to_string/3
     html = """
     <!DOCTYPE html>
     <html>
@@ -49,7 +54,8 @@ defmodule Softaliza.PdfJobs do
     </html>
     """
 
-    {:ok, pdf} = PdfGenerator.generate_binary(html)
+    # TODO handle PDF generation error
+    {:ok, pdf} = PdfGenerator.generate_binary(html, delete_temporary: true)
 
     GenServer.cast(PdfJobs, {:insert, key, pdf})
   end
