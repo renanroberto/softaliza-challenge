@@ -26,12 +26,6 @@ defmodule SoftalizaWeb.EventView do
   end
 
   def render("events.json", %{data: events}) do
-    events
-    |> Enum.filter(&active_event?/1)
-    |> render_many(__MODULE__, "event.json", as: :data)
-  end
-
-  defp active_event?(event) do
-    event.active
+    render_many(events, __MODULE__, "event.json", as: :data)
   end
 end
