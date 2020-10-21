@@ -79,9 +79,12 @@ defmodule Softaliza.PdfJobs do
         %{cert: cert}
       )
 
-    # TODO handle PDF generation error
-    {:ok, pdf} = PdfGenerator.generate_binary(html, delete_temporary: true)
-
-    GenServer.call(PdfJobs, {:insert, key, pdf})
+    with {:ok, pdf} <-
+           PdfGenerator.generate_binary(html, delete_temporary: true) do
+      GenServer.call(PdfJobs, {:insert, key, pdf})
+    else
+      {:error, _} ->
+        GenServer.call(PdfJobs, {:delete, key})
+    end
   end
 end
