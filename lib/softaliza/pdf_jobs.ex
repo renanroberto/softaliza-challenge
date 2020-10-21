@@ -4,8 +4,6 @@ defmodule Softaliza.PdfJobs do
   # TODO as PDF generation takes less then 1 second, then
   # we can simply generate de PDf on the request process
 
-  # TODO replace cast by call whenever is possible
-
   # CLIENT
 
   def start_link(opts) do
@@ -18,7 +16,7 @@ defmodule Softaliza.PdfJobs do
         {:error, :processing}
       else
         # TODO if user never ask for PDF, then PDF is never deleted
-        GenServer.cast(PdfJobs, {:delete, key})
+        GenServer.call(PdfJobs, {:delete, key})
 
         {:ok, value}
       end
@@ -46,6 +44,16 @@ defmodule Softaliza.PdfJobs do
   end
 
   @impl true
+  def handle_call({:insert, key, value}, _from, state) do
+    {:reply, {key, value}, Map.put(state, key, value)}
+  end
+
+  @impl true
+  def handle_call({:delete, key}, _from, state) do
+    {:reply, Map.get(state, key), Map.delete(state, key)}
+  end
+
+  @impl true
   def handle_call({:gen_pdf, key, cert}, _from, state) do
     # TODO fix errors:
     # [error] [message: {#Reference<0.3110335546.3954966532.103079>, :ok},
@@ -59,20 +67,10 @@ defmodule Softaliza.PdfJobs do
     {:reply, :ok, state}
   end
 
-  @impl true
-  def handle_cast({:insert, key, value}, state) do
-    {:noreply, Map.put(state, key, value)}
-  end
-
-  @impl true
-  def handle_cast({:delete, key}, state) do
-    {:noreply, Map.delete(state, key)}
-  end
-
   # TASKS
 
   def gen_pdf(key, cert) do
-    GenServer.cast(PdfJobs, {:insert, key, :processing})
+    GenServer.call(PdfJobs, {:insert, key, :processing})
 
     html =
       Phoenix.View.render_to_string(
@@ -84,6 +82,6 @@ defmodule Softaliza.PdfJobs do
     # TODO handle PDF generation error
     {:ok, pdf} = PdfGenerator.generate_binary(html, delete_temporary: true)
 
-    GenServer.cast(PdfJobs, {:insert, key, pdf})
+    GenServer.call(PdfJobs, {:insert, key, pdf})
   end
 end
