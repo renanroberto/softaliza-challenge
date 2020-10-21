@@ -74,21 +74,12 @@ defmodule Softaliza.PdfJobs do
   def gen_pdf(key, cert) do
     GenServer.cast(PdfJobs, {:insert, key, :processing})
 
-    # TODO move it to a .html.eex and render with
-    # Phoenix.View.render_to_string/3
-    html = """
-    <!DOCTYPE html>
-    <html>
-    <head>
-    <meta charset="UTF-8">
-    </head>
-    <body>
-    <center><h1>Certification</h1></center>
-    <p><b>Event:</b> #{cert.event}</p>
-    <p><b>Name:</b> #{cert.name}</p>
-    </body>
-    </html>
-    """
+    html =
+      Phoenix.View.render_to_string(
+        SoftalizaWeb.PageView,
+        "certificate.html",
+        %{cert: cert}
+      )
 
     # TODO handle PDF generation error
     {:ok, pdf} = PdfGenerator.generate_binary(html, delete_temporary: true)

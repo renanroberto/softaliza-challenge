@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<meta charset="UTF-8">
+    </head>
+    <body>
+	<center><h1>Certification</h1></center>
+	<p><b>Event:</b> <%= @cert.event %></p>
+	<p><b>Name:</b> <%= @cert.name %></p>
+    </body>
+</html>
