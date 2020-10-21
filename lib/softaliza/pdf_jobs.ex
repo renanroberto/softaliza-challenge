@@ -55,14 +55,7 @@ defmodule Softaliza.PdfJobs do
 
   @impl true
   def handle_call({:gen_pdf, key, cert}, _from, state) do
-    # TODO fix errors:
-    # [error] [message: {#Reference<0.3110335546.3954966532.103079>, :ok},
-    # module: Softaliza.PdfJobs, name: PdfJobs]
-    # [error] [message: {:DOWN, #Reference<0.3110335546.3954966532.103079>,
-    # :process, #PID<0.498.0>, :normal}, module: Softaliza.PdfJobs,
-    # name: PdfJobs]
-
-    Task.async(fn -> gen_pdf(key, cert) end)
+    Task.start(fn -> gen_pdf(key, cert) end)
 
     {:reply, :ok, state}
   end
