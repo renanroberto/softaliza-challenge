@@ -15,7 +15,6 @@ defmodule Softaliza.PdfJobs do
       if value == :processing do
         {:error, :processing}
       else
-        # TODO if user never ask for PDF, then PDF is never deleted
         GenServer.call(PdfJobs, {:delete, key})
 
         {:ok, value}
@@ -45,6 +44,12 @@ defmodule Softaliza.PdfJobs do
 
   @impl true
   def handle_call({:insert, key, value}, _from, state) do
+    if value != :processing do
+      one_day = 86_400_000
+
+      Process.send_after(PdfJobs, {:pdf_expired, key}, one_day)
+    end
+
     {:reply, {key, value}, Map.put(state, key, value)}
   end
 
@@ -58,6 +63,11 @@ defmodule Softaliza.PdfJobs do
     Task.start(fn -> gen_pdf(key, cert) end)
 
     {:reply, :ok, state}
+  end
+
+  @impl true
+  def handle_info({:pdf_expired, key}, state) do
+    {:noreply, Map.delete(state, key)}
   end
 
   # TASKS
